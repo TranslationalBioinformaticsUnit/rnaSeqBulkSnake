@@ -1,4 +1,4 @@
-#Bulk-RNAseq data processing for differential expression assessment
+# Bulk-RNAseq data processing for differential expression assessment
 
 Gene-level differential expression assessment from bulk RNA-seq data with DESeq2, EdgeR, and Voom.
 
