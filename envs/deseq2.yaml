@@ -1,0 +1,13 @@
+name: rna-seq-deseq-workflow
+channels: !!python/tuple
+- !!python/unicode
+  'conda-forge'
+- !!python/unicode
+  'bioconda'
+- !!python/unicode
+  'defaults'
+dependencies:
+- bioconductor-deseq2
+- bioconductor-biocparallel
+- bioconductor-edger
+- bioconductor-limma
