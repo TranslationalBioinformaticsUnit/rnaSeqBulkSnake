@@ -4,19 +4,19 @@ Gene-level differential expression assessment from bulk RNA-seq data with DESeq2
 
 ## How to use this pipeline
 
-Step 1: Configure workflow
+***Step 1:*** Configure workflow
 Set the input read file directory, the reference sequence, etc. in the config.yaml file.
 
-Step 2: Provide sample annotation
+***Step 2:*** Provide sample annotation
 Provide annotation of which sample corresponds to which treatment in the samples.tsv file.
 
-Step 3: Setup your shell envinroment
+***Step 3:*** Setup your shell envinroment
 Provide optional configuration of shell in config.sh (e.g. "module load <...>" or "export PATH=<...>" or "source activate <environment>")
 
-Step 4: Test setup
+***Step 4:*** Test setup
 Test configuration in dry-run: snakemake -n / snakemake --use-conda -n
 
-Step 5:
+***Step 5:***
 Execute the workflow locally via
 
 snakemake --use-conda --cores $ncpu
