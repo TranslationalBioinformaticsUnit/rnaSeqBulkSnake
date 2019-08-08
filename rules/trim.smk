@@ -32,7 +32,6 @@ rule trimmed_qc:
             fastqc -o {params.out_dir} -f fastq {input.r1} {input.r2}
         """
 
-
 rule trimmomatic_pe:
     input:
         r1 = config["readDataDir"] + "{sample}_1.fastq.gz",
@@ -43,12 +42,35 @@ rule trimmomatic_pe:
         # reads where trimming entirely removed the mate
         r1_unpaired = config["outputDir"] + "trimmed/{sample}.1.unpaired.fastq.gz",
         r2_unpaired = config["outputDir"] + "trimmed/{sample}.2.unpaired.fastq.gz"
-    log:
-        config["outputDir"] + "logs/trimmomatic/{sample}.log"
     params:
         # list of trimmers (see manual)
-        trimmer=["ILLUMINACLIP:" + config["params"]["trimmo_adapter_path"] + ":2:30:10", "LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36"],
+        trimmoConf="ILLUMINACLIP:" + config["params"]["trimmo_adapter_path"] + ":2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36",
         # optional parameters
-        extra="-phred33 -threads " + config["params"]["trimmo_threads"]
-    wrapper:
-        "0.17.4/bio/trimmomatic/pe"
+        extra="-phred33 -threads " + config["params"]["trimmo_threads"],
+        log=config["outputDir"] + "logs/trimmomatic/{sample}.log"
+    shell: """
+        trimmomatic PE {input.r1} {input.r2} {output.r1} \
+         {output.r1_unpaired} {output.r2} {output.r2_unpaired} \
+         {params.trimmoConf} {params.extra} > {params.log} 2>&1
+        """
+
+
+# rule trimmomatic_pe:
+#     input:
+#         r1 = config["readDataDir"] + "{sample}_1.fastq.gz",
+#         r2 = config["readDataDir"] + "{sample}_2.fastq.gz"
+#     output:
+#         r1 = config["outputDir"] + "trimmed/{sample}.1.fastq.gz",
+#         r2 = config["outputDir"] + "trimmed/{sample}.2.fastq.gz",
+#         # reads where trimming entirely removed the mate
+#         r1_unpaired = config["outputDir"] + "trimmed/{sample}.1.unpaired.fastq.gz",
+#         r2_unpaired = config["outputDir"] + "trimmed/{sample}.2.unpaired.fastq.gz"
+#     log:
+#         config["outputDir"] + "logs/trimmomatic/{sample}.log"
+#     params:
+#         # list of trimmers (see manual)
+#         trimmer=["ILLUMINACLIP:" + config["params"]["trimmo_adapter_path"] + ":2:30:10", "LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36"],
+#         # optional parameters
+#         extra="-phred33 -threads " + config["params"]["trimmo_threads"]
+#     wrapper:
+#         "0.17.4/bio/trimmomatic/pe"
