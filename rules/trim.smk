@@ -44,9 +44,9 @@ rule trimmomatic_pe:
         r2_unpaired = config["outputDir"] + "trimmed/{sample}.2.unpaired.fastq.gz"
     params:
         # list of trimmers (see manual)
-        trimmoConf="ILLUMINACLIP:" + config["params"]["trimmo_adapter_path"] + ":2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36",
+        trimmoConf="ILLUMINACLIP:" + config["params"]["trimmo_adapter_path"] + config["params"]["trimmo_configuration"],
         # optional parameters
-        extra="-phred33 -threads " + config["params"]["trimmo_threads"],
+        extra="-threads " + config["params"]["trimmo_threads"],
         log=config["outputDir"] + "logs/trimmomatic/{sample}.log"
     shell: """
         trimmomatic PE {input.r1} {input.r2} {output.r1} \
