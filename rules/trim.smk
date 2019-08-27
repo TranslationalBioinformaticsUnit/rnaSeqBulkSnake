@@ -47,11 +47,13 @@ rule trimmomatic_pe:
         trimmoConf="ILLUMINACLIP:" + config["params"]["trimmo_adapter_path"] + config["params"]["trimmo_configuration"],
         # optional parameters
         extra="-threads " + config["params"]["trimmo_threads"],
-        log=config["outputDir"] + "logs/trimmomatic/{sample}.log"
+        logDir=config["outputDir"] + "logs/trimmomatic/",
+        logFile="{sample}.log"
     shell: """
+        mkdir -p {params.logDir} && \
         trimmomatic PE {input.r1} {input.r2} {output.r1} \
          {output.r1_unpaired} {output.r2} {output.r2_unpaired} \
-         {params.trimmoConf} {params.extra} > {params.log} 2>&1
+         {params.trimmoConf} {params.extra} > {params.logDir}{params.logFile} 2>&1
         """
 
 
